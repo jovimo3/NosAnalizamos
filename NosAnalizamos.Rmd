@@ -36,7 +36,18 @@ file_path <- "data/NosAutoanalizamos2025 - Hoja1.tsv"
 You can also embed plots, for example:
 
 ```{r pressure, echo=FALSE}
-plot(pressure)
+# Charge empty dataframe (only structure)
+df <- data_dr[0,]
+
+for (i in 1:nrow(data_dr)){
+  a <- c()
+  if(!is.na(data_dr[i,]$Id)){
+    if(data_dr[i,]$Id != "martsobm"){
+      dt <- data_dr[i,]$`FechaNac(DD-MM-YYY)` %>% 
+            gsub("/","-",.) %>% as.Date(format = "%d-%m-%Y")
+    }
+  }
+}
 ```
 
 Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
