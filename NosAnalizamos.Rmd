@@ -25,7 +25,7 @@ file_path <- "data/NosAutoanalizamos2025 - Hoja1.tsv"
          delim = "\t", escape_double = FALSE, 
          col_types = cols(`FechaNac(DD-MM-YYY)` = col_character(), 
          Age = col_number(), Sex = col_character(), 
-         Wr.Hnd = col_number(), NW.Hnd = col_character(), 
+         Wr.Hnd = col_character(), NW.Hnd = col_character(), 
          Pulse = col_number(), Height = col_number()), 
          trim_ws = TRUE, skip = 27)
  
@@ -37,27 +37,58 @@ You can also embed plots, for example:
 
 ```{r pressure, echo=FALSE}
 # Charge empty dataframe (only structure)
-df <- data_dr[0,]
+df <- data_dr
 
-for (i in 1:nrow(data_dr)){
-  a <- c()
-  if(!is.na(data_dr[i,]$Id)){
-    if(data_dr[i,]$Id != "martsobm"){
-      dt <- data_dr[i,]$`FechaNac(DD-MM-YYY)` %>% 
-            gsub("/","-",.) %>% as.Date(format = "%d-%m-%Y")
+# Elimination user "martsobm"
+df <- df %>% filter(Id != "martsobm")
+
+
+for (i in 1:nrow(df)){
+  if(!is.na(df[i,]$Id)){
+    df[i,]$`FechaNac(DD-MM-YYY)` <- df[i,]$`FechaNac(DD-MM-YYY)` %>% 
+          gsub("/","-",.)
       
-      # Age is the same
+    # Age is the same
       
-      data_dr[i,]$Sex %>% toupper()
-      sex <- NA
-      if (grepl("^M",data_dr[i,]$Sex)){
-        sex <- "M"
-      }else if(grepl("^F",data_dr[i,]$Sex)){
-        sex <- "F"
-      }
-      print(sex)
+    df[i,]$Sex <- df[i,]$Sex %>% toupper()
+    
+    if (grepl("^M",df[i,]$Sex)){
+       df[i,]$Sex <- "M"
+    }else if(grepl("^F",df[i,]$Sex)){
+      df[i,]$Sex <- "F"
+    }
+      
+    # wide of writing hand
+    df[i,]$Wr.Hnd <- df[i,]$Wr.Hnd %>% gsub(",",".",.)
+    
+    # Writing hand
+    df[i,]$NW.Hnd <- df[i,]$NW.Hnd %>% toupper()
+    
+    if (grepl("^D",df[i,]$NW.Hnd)){
+       df[i,]$NW.Hnd <- "D"
+    }else if(grepl("^I",df[i,]$NW.Hnd)){
+      df[i,]$NW.Hnd <- "I"
+    }
+    
+    # Fold Hand
+    df[i,]$Fold <- df[i,]$Fold %>% toupper()
+    
+    if (grepl("^D",df[i,]$Fold)){
+       df[i,]$Fold <- "D"
+    }else if(grepl("^I",df[i,]$Fold)){
+      df[i,]$Fold <- "I"
+    }
+    
+    # Clap hand
+    df[i,]$Clap <- df[i,]$Clap %>% toupper()
+    
+    if (grepl("^D",df[i,]$Clap)){
+       df[i,]$Clap <- "D s I"
+    }else if(grepl("^I",df[i,]$Clap)){
+      df[i,]$Clap <- "I s D"
     }
   }
+
 }
 ```
 
