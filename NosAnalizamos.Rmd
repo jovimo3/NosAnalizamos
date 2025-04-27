@@ -45,6 +45,17 @@ for (i in 1:nrow(data_dr)){
     if(data_dr[i,]$Id != "martsobm"){
       dt <- data_dr[i,]$`FechaNac(DD-MM-YYY)` %>% 
             gsub("/","-",.) %>% as.Date(format = "%d-%m-%Y")
+      
+      # Age is the same
+      
+      data_dr[i,]$Sex %>% toupper()
+      sex <- NA
+      if (grepl("^M",data_dr[i,]$Sex)){
+        sex <- "M"
+      }else if(grepl("^F",data_dr[i,]$Sex)){
+        sex <- "F"
+      }
+      print(sex)
     }
   }
 }
