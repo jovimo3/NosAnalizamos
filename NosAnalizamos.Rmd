@@ -45,11 +45,11 @@ df <- df %>% filter(Id != "martsobm")
 
 for (i in 1:nrow(df)){
   if(!is.na(df[i,]$Id)){
+    # Date column
     df[i,]$`FechaNac(DD-MM-YYY)` <- df[i,]$`FechaNac(DD-MM-YYY)` %>% 
           gsub("/","-",.)
       
-    # Age is the same
-      
+    # Sex Column
     df[i,]$Sex <- df[i,]$Sex %>% toupper()
     
     if (grepl("^M",df[i,]$Sex)){
@@ -86,6 +86,25 @@ for (i in 1:nrow(df)){
        df[i,]$Clap <- "D s I"
     }else if(grepl("^I",df[i,]$Clap)){
       df[i,]$Clap <- "I s D"
+    }
+    
+    # Exercice
+    df[i,]$Exer <- df[i,]$Exer %>% toupper()
+    
+    if (df[i,]$Exer == "NO" | is.na(df[i,]$Exer)){
+      df[i,]$Exer <- "0"
+    }else if(grepl("^S",df[i,]$Exer)){
+      df[i,]$Exer <- NA
+    }
+    
+    # Smoking
+    df[i,]$Smoke <- df[i,]$Smoke %>% toupper()
+    if (repl("^S",df[i,]$Smoke)){
+      df[i,]$Smoke <- "SI"
+    } else if (repl("F",df[i,]$Smoke)){
+      df[i,]$Smoke <- "DE FIESTA"
+    }else{
+      df[i,]$Smoke <- "NO"
     }
   }
 
